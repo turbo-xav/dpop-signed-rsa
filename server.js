@@ -8,7 +8,7 @@ const PORT = 3000;
 app.use(cors({
     origin: "http://localhost:8081", // Adresse du frontend autorisée
     methods: ["GET", "POST"], // Méthodes HTTP autorisées
-    allowedHeaders: ["Content-Type", "x-client-id", "dpop"], // En-têtes autorisés
+    allowedHeaders: ["Content-Type", "x-client-id", "dpop",'authorization'], // En-têtes autorisés
 }));
 // Middleware pour lire le JSON des requêtes
 app.use(bodyParser.json());
@@ -63,6 +63,8 @@ app.get("/secure-endpoint", async (req, res) => {
 
         // Vérifications supplémentaires (optionnel)
         const currentTimestamp = Math.floor(Date.now() / 1000);
+        console.warn("Timestamp actuel :", currentTimestamp);
+        console.warn("Timestamp trouvé :", payload.iat);
         if (payload.iat < currentTimestamp - 300) {
             // Token émis il y a plus de 5 minutes
             return res.status(401).send("La preuve DPoP est expirée.");
